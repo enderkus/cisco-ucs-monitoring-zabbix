@@ -1,0 +1,483 @@
+zabbix_export:
+  version: '7.2'
+  template_groups:
+    - uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    - uuid: 013083178be640179eec6d174887549d
+      template: Template_UCS_XML_API
+      name: Template_UCS_XML_API
+      groups:
+        - name: Templates/Applications
+      discovery_rules:
+        - uuid: 7a31a5fc70314c53b49cfe3a2d4a4e22
+          name: 'UCS Blade Discovery'
+          type: TRAP
+          key: ucs.blade.discovery
+          item_prototypes:
+            - uuid: 1e680aa81d8048ad8fc4bb4cf8976c7e
+              name: 'UCS Blade {#BLADE_NAME} Operability'
+              type: TRAP
+              key: 'ucs.blade.operability[{#BLADE_ID}]'
+              valuemap:
+                name: 'UCS Blade Operational State'
+              trigger_prototypes:
+                - uuid: f0e1f66cddc2461eba64e959716b79eb
+                  expression: 'last(/Template_UCS_XML_API/ucs.blade.operability[{#BLADE_ID}])=1'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.blade.operability[{#BLADE_ID}])=0'
+                  name: 'UCS Blade {#BLADE_NAME} is not operable'
+                  priority: DISASTER
+                  manual_close: 'YES'
+            - uuid: 6367137ababc4312a7b8ee6fd2e8ed45
+              name: 'UCS Blade {#BLADE_NAME} Operational State'
+              type: TRAP
+              key: 'ucs.blade.oper_state[{#BLADE_ID}]'
+              valuemap:
+                name: 'UCS Blade Operational State'
+              trigger_prototypes:
+                - uuid: a1b7bccc27374373bd4a3422d49baa9b
+                  expression: 'last(/Template_UCS_XML_API/ucs.blade.oper_state[{#BLADE_ID}])=0'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.blade.oper_state[{#BLADE_ID}])=1'
+                  name: 'UCS Blade {#BLADE_NAME} is not associated'
+                  priority: DISASTER
+                  manual_close: 'YES'
+            - uuid: 4c929260638d4953b2a77ffdee59de3e
+              name: 'UCS Blade {#BLADE_NAME} Power State'
+              type: TRAP
+              key: 'ucs.blade.power_state[{#BLADE_ID}]'
+              valuemap:
+                name: 'UCS Blade Power State'
+              trigger_prototypes:
+                - uuid: 1481580e52474a8db0058f7a4772d6fb
+                  expression: 'last(/Template_UCS_XML_API/ucs.blade.power_state[{#BLADE_ID}])=0'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.blade.power_state[{#BLADE_ID}])=1'
+                  name: 'UCS Blade {#BLADE_NAME} is powered off'
+                  priority: DISASTER
+                  manual_close: 'YES'
+            - uuid: 9aaf55e10fea43a1a1893f45dfa3904f
+              name: 'UCS Blade {#BLADE_NAME} Presence'
+              type: TRAP
+              key: 'ucs.blade.presence[{#BLADE_ID}]'
+              valuemap:
+                name: 'UCS Blade Presence'
+              trigger_prototypes:
+                - uuid: 563c57fcd53545018452ee283b018790
+                  expression: 'last(/Template_UCS_XML_API/ucs.blade.presence[{#BLADE_ID}])=0'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.blade.presence[{#BLADE_ID}])=1'
+                  name: 'UCS Blade {#BLADE_NAME} is missing'
+                  priority: DISASTER
+                  manual_close: 'YES'
+        - uuid: 5ebff534512e4d23bb68c07f01828cfb
+          name: 'UCS Chassis Discovery'
+          type: TRAP
+          key: ucs.chassis.discovery
+          item_prototypes:
+            - uuid: 5045a3fefd6f496f9b259432199091bb
+              name: 'UCS Chassis {#CHASSIS_NAME} Operational State'
+              type: TRAP
+              key: 'ucs.chassis.oper_state[{#CHASSIS_ID}]'
+              valuemap:
+                name: 'UCS Chassis Operational State'
+              trigger_prototypes:
+                - uuid: 262030db8fe04d4da04e74ccb1ec6137
+                  expression: 'last(/Template_UCS_XML_API/ucs.chassis.oper_state[{#CHASSIS_ID}])=0'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.chassis.oper_state[{#CHASSIS_ID}])=1'
+                  name: 'UCS Chassis {#CHASSIS_NAME} is down'
+                  priority: DISASTER
+                  manual_close: 'YES'
+            - uuid: ceebf83d65bb41a6aad3181dc37dfaab
+              name: 'UCS Chassis {#CHASSIS_NAME} Overall Status'
+              type: TRAP
+              key: 'ucs.chassis.overall_status[{#CHASSIS_ID}]'
+              valuemap:
+                name: 'UCS Chassis Overall Status'
+              trigger_prototypes:
+                - uuid: ddd9d0a1961e4c6ab2d15a31bcda82d6
+                  expression: 'last(/Template_UCS_XML_API/ucs.chassis.overall_status[{#CHASSIS_ID}])=2'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.chassis.overall_status[{#CHASSIS_ID}])=0'
+                  name: 'UCS Chassis {#CHASSIS_NAME} status is degraded'
+                  priority: DISASTER
+                  manual_close: 'YES'
+                - uuid: b794c3d83d184d9f9ba4b6c2bcb3990e
+                  expression: 'last(/Template_UCS_XML_API/ucs.chassis.overall_status[{#CHASSIS_ID}])=1'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.chassis.overall_status[{#CHASSIS_ID}])=0'
+                  name: 'UCS Chassis {#CHASSIS_NAME} status is not operable'
+                  priority: DISASTER
+            - uuid: be0368dd905540b584e53fcbeff384d8
+              name: 'UCS Chassis {#CHASSIS_NAME} Power State'
+              type: TRAP
+              key: 'ucs.chassis.power_state[{#CHASSIS_ID}]'
+              valuemap:
+                name: 'UCS Chassis Power State'
+              trigger_prototypes:
+                - uuid: 11d50cd04606486f93f8edf8970f57f0
+                  expression: 'last(/Template_UCS_XML_API/ucs.chassis.power_state[{#CHASSIS_ID}])<>1'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.chassis.power_state[{#CHASSIS_ID}])=1'
+                  name: 'UCS Chassis {#CHASSIS_NAME} has power problems'
+                  priority: DISASTER
+                  manual_close: 'YES'
+            - uuid: c9b617e305354ca0a978dee5b462e8e4
+              name: 'UCS Chassis {#CHASSIS_NAME} Thermal State'
+              type: TRAP
+              key: 'ucs.chassis.thermal_state[{#CHASSIS_ID}]'
+              valuemap:
+                name: 'UCS Chassis Thermal State'
+              trigger_prototypes:
+                - uuid: 060861052cbf40d99a12223b9a20dc92
+                  expression: 'last(/Template_UCS_XML_API/ucs.chassis.thermal_state[{#CHASSIS_ID}])=1'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.chassis.thermal_state[{#CHASSIS_ID}])=0'
+                  name: 'UCS Chassis {#CHASSIS_NAME} has thermal problems'
+                  priority: DISASTER
+                  manual_close: 'YES'
+        - uuid: 0761336c67034ba9bee4165d297327dd
+          name: 'UCS Fabric Interconnect Discovery'
+          type: TRAP
+          key: ucs.fabric_interconnect.discovery
+          item_prototypes:
+            - uuid: e600a71686ba443e8e9046e2552e9e58
+              name: 'UCS Fabric Interconnect {#FI_NAME} Fault Count'
+              type: TRAP
+              key: 'ucs.fabric_interconnect.fault_count[{#FI_ID}]'
+              trigger_prototypes:
+                - uuid: 3503840c17204d348494f45bb88fd3b8
+                  expression: 'last(/Template_UCS_XML_API/ucs.fabric_interconnect.fault_count[{#FI_ID}])>0'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.fabric_interconnect.fault_count[{#FI_ID}])=0'
+                  name: 'UCS Fabric Interconnect {#FI_NAME} has active faults'
+                  priority: DISASTER
+                  manual_close: 'YES'
+            - uuid: 577818de036a4a978f07814a231f3bba
+              name: 'UCS Fabric Interconnect {#FI_NAME} Memory Usage'
+              type: TRAP
+              key: 'ucs.fabric_interconnect.memory_usage[{#FI_ID}]'
+              value_type: FLOAT
+              units: '%'
+              trigger_prototypes:
+                - uuid: f2c367cca11d43f9a6e5befb01c99554
+                  expression: 'last(/Template_UCS_XML_API/ucs.fabric_interconnect.memory_usage[{#FI_ID}])>80'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.fabric_interconnect.memory_usage[{#FI_ID}])<75'
+                  name: 'UCS Fabric Interconnect {#FI_NAME} high memory usage'
+                  priority: DISASTER
+                  manual_close: 'YES'
+            - uuid: 7a81c3e42f38412892ee8801debad7ed
+              name: 'UCS Fabric Interconnect {#FI_NAME} Operability'
+              type: TRAP
+              key: 'ucs.fabric_interconnect.operability[{#FI_ID}]'
+              valuemap:
+                name: 'UCS Fabric Interconnect Operability'
+              trigger_prototypes:
+                - uuid: b4d79a33ef2a4c338ed1e69fad951f81
+                  expression: 'last(/Template_UCS_XML_API/ucs.fabric_interconnect.operability[{#FI_ID}])=2'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.fabric_interconnect.operability[{#FI_ID}])=0'
+                  name: 'UCS Fabric Interconnect {#FI_NAME} is degraded'
+                  priority: DISASTER
+                  manual_close: 'YES'
+                - uuid: 358f27f03bab48968738748decc2040a
+                  expression: 'last(/Template_UCS_XML_API/ucs.fabric_interconnect.operability[{#FI_ID}])=1'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.fabric_interconnect.operability[{#FI_ID}])=0'
+                  name: 'UCS Fabric Interconnect {#FI_NAME} is not operable'
+                  priority: DISASTER
+                  manual_close: 'YES'
+            - uuid: eee084af003944c2a66544f58b0e33b2
+              name: 'UCS Fabric Interconnect {#FI_NAME} Thermal State'
+              type: TRAP
+              key: 'ucs.fabric_interconnect.thermal[{#FI_ID}]'
+              valuemap:
+                name: 'UCS Fabric Interconnect Thermal'
+              trigger_prototypes:
+                - uuid: 74ad03441cf147b0b12d73c27e92fd00
+                  expression: 'last(/Template_UCS_XML_API/ucs.fabric_interconnect.thermal[{#FI_ID}])=1'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.fabric_interconnect.thermal[{#FI_ID}])=0'
+                  name: 'UCS Fabric Interconnect {#FI_NAME} has thermal problems'
+                  priority: DISASTER
+                  manual_close: 'YES'
+        - uuid: d7a0cfa41ad746adac828a9f0bfb956d
+          name: 'UCS Fault Discovery - Critical'
+          type: TRAP
+          key: ucs.fault.discovery.critical
+          filter:
+            conditions:
+              - macro: '{#SEVERITY}'
+                value: critical
+          item_prototypes:
+            - uuid: 3673ed26ed6e42a6bf9e42fea76421f0
+              name: 'UCS Fault Discovery - Critical - FAULT ID : {#FAULTID} -  {#DESCR}'
+              type: TRAP
+              key: 'ucs.fault.critical[{#FAULTID}]'
+              trigger_prototypes:
+                - uuid: 07e757fc87574e17bb403d7729ba1d63
+                  expression: 'last(/Template_UCS_XML_API/ucs.fault.critical[{#FAULTID}])=1'
+                  name: 'UCS Fault Discovery - Critical - FAULT ID : {#FAULTID} -  {#DESCR}'
+                  priority: DISASTER
+                  manual_close: 'YES'
+        - uuid: 5d5e19c7089046359b76f771e6399b48
+          name: 'UCS Fault Discovery - Info'
+          type: TRAP
+          key: ucs.fault.discovery.info
+          item_prototypes:
+            - uuid: e0c04d3abba243e38893e8e8e88d9776
+              name: 'UCS Fault Discovery - Info - FAULT ID : {#FAULTID} -  {#DESCR}'
+              type: TRAP
+              key: 'ucs.fault.info[{#FAULTID}]'
+              trigger_prototypes:
+                - uuid: 0c8d4727cf0d44a784dd5cc692181e55
+                  expression: 'last(/Template_UCS_XML_API/ucs.fault.info[{#FAULTID}])=1'
+                  name: 'UCS Fault Discovery - Info - FAULT ID : {#FAULTID} -  {#DESCR}'
+                  priority: INFO
+                  manual_close: 'YES'
+        - uuid: e44036ba175a404381b38df61f0ce099
+          name: 'UCS Fault Discovery - Major'
+          type: TRAP
+          key: ucs.fault.discovery.major
+          item_prototypes:
+            - uuid: 72d51a40048a44f4a805b2539bd0b089
+              name: 'UCS Fault Discovery - Major - FAULT ID : {#FAULTID} -  {#DESCR}'
+              type: TRAP
+              key: 'ucs.fault.major[{#FAULTID}]'
+              trigger_prototypes:
+                - uuid: 6d0dee76af0c435daa48424831a2612c
+                  expression: 'last(/Template_UCS_XML_API/ucs.fault.major[{#FAULTID}])=1'
+                  name: 'UCS Fault Discovery - Major - FAULT ID : {#FAULTID} -  {#DESCR}'
+                  priority: HIGH
+                  manual_close: 'YES'
+        - uuid: 647b889dfe344e738101005e65747b49
+          name: 'UCS Fault Discovery - Minor'
+          type: TRAP
+          key: ucs.fault.discovery.minor
+          item_prototypes:
+            - uuid: 37f5e2bcf3d742008b79ea6a6d7c680c
+              name: 'UCS Fault Discovery - Minor - FAULT ID : {#FAULTID} -  {#DESCR}'
+              type: TRAP
+              key: 'ucs.fault.minor[{#FAULTID}]'
+              trigger_prototypes:
+                - uuid: dd29785aa1bd40ec9dba17fda34d9ecc
+                  expression: 'last(/Template_UCS_XML_API/ucs.fault.minor[{#FAULTID}])=1'
+                  name: 'UCS Fault Discovery - Minor - FAULT ID : {#FAULTID} -  {#DESCR}'
+                  manual_close: 'YES'
+        - uuid: 549e8c71d27947bba5f07aeac46695ab
+          name: 'UCS Fault Discovery - Warning'
+          type: TRAP
+          key: ucs.fault.discovery.warning
+          item_prototypes:
+            - uuid: 1b346196c229447e97854787936d16f3
+              name: 'UCS Fault Discovery - Warning - FAULT ID : {#FAULTID} -  {#DESCR}'
+              type: TRAP
+              key: 'ucs.fault.warning[{#FAULTID}]'
+              trigger_prototypes:
+                - uuid: 5946be04d81443089b90e7d1fb3717a0
+                  expression: 'last(/Template_UCS_XML_API/ucs.fault.warning[{#FAULTID}])=1'
+                  name: 'UCS Fault Discovery - Warning - FAULT ID : {#FAULTID} -  {#DESCR}'
+                  priority: WARNING
+                  manual_close: 'YES'
+        - uuid: 2433dc46ac774ca8ad7fcb92596001aa
+          name: 'UCS Port Discovery'
+          type: TRAP
+          key: ucs.port.discovery
+          item_prototypes:
+            - uuid: 32de4d088587434e80a576ed2858e7d0
+              name: 'Port {#PORT_NAME} Admin State'
+              type: TRAP
+              key: 'ucs.port.admin_state[{#PORT_KEY}]'
+              valuemap:
+                name: 'UCS Port Admin State'
+            - uuid: f801307d1f8a489d8c2b81f3c145eee5
+              name: 'Port {#PORT_NAME} Interface Role'
+              type: TRAP
+              key: 'ucs.port.if_role[{#PORT_KEY}]'
+              valuemap:
+                name: 'UCS Port Role'
+            - uuid: e1e60993237348718a6b0b22852fe9d4
+              name: 'Port {#PORT_NAME} Operational State'
+              type: TRAP
+              key: 'ucs.port.oper_state[{#PORT_KEY}]'
+              valuemap:
+                name: 'UCS Port Oper State'
+              trigger_prototypes:
+                - uuid: 23e2b3e38034469b8cad2569d8dc6ec5
+                  expression: 'last(/Template_UCS_XML_API/ucs.port.oper_state[{#PORT_KEY}])=3'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.port.oper_state[{#PORT_KEY}])=1'
+                  name: 'Port {#PORT_NAME} has LINK-DOWN'
+                  priority: DISASTER
+                  manual_close: 'YES'
+                - uuid: b2940729c071416cbfe33530caed4c14
+                  expression: 'last(/Template_UCS_XML_API/ucs.port.oper_state[{#PORT_KEY}])=0'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.port.oper_state[{#PORT_KEY}])=1'
+                  name: 'Port {#PORT_NAME} is DOWN'
+                  priority: HIGH
+                  manual_close: 'YES'
+        - uuid: 70e228a9471346d9a1d151f84dcab710
+          name: 'UCS Server Interface Discovery'
+          type: TRAP
+          key: ucs.server_interface.discovery
+          item_prototypes:
+            - uuid: 03bd908c3335470cb2f2fd5b12d9e005
+              name: 'Server Interface {#IF_NAME} Admin State'
+              type: TRAP
+              key: 'ucs.server_interface.admin_state[{#IF_KEY}]'
+              valuemap:
+                name: 'UCS Port Admin State'
+              trigger_prototypes:
+                - uuid: c5cedfb10bc84ad5b6af8ecc1193988a
+                  expression: 'last(/Template_UCS_XML_API/ucs.server_interface.admin_state[{#IF_KEY}])=0'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.server_interface.admin_state[{#IF_KEY}])=1'
+                  name: 'Server Interface {#IF_NAME} is DOWN'
+                  priority: DISASTER
+                  manual_close: 'YES'
+            - uuid: d0cd1467bca140f89c8a81218f93b06d
+              name: 'Server Interface {#IF_NAME} Operational State'
+              type: TRAP
+              key: 'ucs.server_interface.oper_state[{#IF_KEY}]'
+              valuemap:
+                name: 'UCS Port Oper State'
+              trigger_prototypes:
+                - uuid: b2c8a0bf3a7a4759a0c3b1bc5febe052
+                  expression: 'last(/Template_UCS_XML_API/ucs.server_interface.oper_state[{#IF_KEY}])=3'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/Template_UCS_XML_API/ucs.server_interface.oper_state[{#IF_KEY}])=1'
+                  name: 'Server Interface {#IF_NAME} has LINK-DOWN'
+                  priority: DISASTER
+                  manual_close: 'YES'
+      valuemaps:
+        - uuid: 1cf08f1974b5445eb294c4c29de1c384
+          name: 'UCS Blade Operability'
+          mappings:
+            - value: '0'
+              newvalue: Operable
+            - value: '1'
+              newvalue: Inoperable
+            - value: '2'
+              newvalue: Degraded
+            - value: '3'
+              newvalue: Unknown
+        - uuid: 89da2da0ccf44fbcb050908d2ed58af2
+          name: 'UCS Blade Operational State'
+          mappings:
+            - value: '0'
+              newvalue: Unassociated
+            - value: '1'
+              newvalue: Associated
+            - value: '2'
+              newvalue: Unknown
+        - uuid: 4b9d5fec8052419c945d26e883b48ceb
+          name: 'UCS Blade Power State'
+          mappings:
+            - value: '0'
+              newvalue: 'Off'
+            - value: '1'
+              newvalue: 'On'
+            - value: '2'
+              newvalue: Unknow
+        - uuid: 0fd50856d8294704a80878765539bfb3
+          name: 'UCS Blade Presence'
+          mappings:
+            - value: '0'
+              newvalue: Missing
+            - value: '1'
+              newvalue: Equipped
+            - value: '2'
+              newvalue: Unknown
+        - uuid: 30252a7e7af9418181674b1d75cab72a
+          name: 'UCS Chassis Operational State'
+          mappings:
+            - value: '0'
+              newvalue: Inoperable
+            - value: '1'
+              newvalue: Operable
+            - value: '2'
+              newvalue: Unknown
+        - uuid: 27417104f63f4e1588cbf62976d1bfcc
+          name: 'UCS Chassis Overall Status'
+          mappings:
+            - value: '0'
+              newvalue: Operable
+            - value: '1'
+              newvalue: Inoperable
+            - value: '2'
+              newvalue: Degraded
+            - value: '3'
+              newvalue: Unknown
+        - uuid: fd151cf322b9431580893426266f6d6a
+          name: 'UCS Chassis Power State'
+          mappings:
+            - value: '0'
+              newvalue: 'Off'
+            - value: '1'
+              newvalue: OK
+            - value: '2'
+              newvalue: Unknown
+        - uuid: 4c1c874d2d1749f58d4178008a54922b
+          name: 'UCS Chassis Thermal State'
+          mappings:
+            - value: '0'
+              newvalue: OK
+            - value: '1'
+              newvalue: Problem
+            - value: '2'
+              newvalue: Unknown
+        - uuid: 97379243294e4e8faf0913c661cd719a
+          name: 'UCS Fabric Interconnect Operability'
+          mappings:
+            - value: '0'
+              newvalue: Operable
+            - value: '1'
+              newvalue: Inoperable
+            - value: '2'
+              newvalue: Degraded
+            - value: '3'
+              newvalue: Unknown
+        - uuid: c5b275c2e1a3450ca3970457f4bf3867
+          name: 'UCS Fabric Interconnect Thermal'
+          mappings:
+            - value: '0'
+              newvalue: OK
+            - value: '1'
+              newvalue: Problem
+            - value: '2'
+              newvalue: Unknown
+        - uuid: ade3539c85534023b44463785dbf1acc
+          name: 'UCS Port Admin State'
+          mappings:
+            - value: '0'
+              newvalue: disabled
+            - value: '1'
+              newvalue: enabled
+            - value: '2'
+              newvalue: unknown
+        - uuid: 26060759b53346cda2d05d8eae5f7cc2
+          name: 'UCS Port Oper State'
+          mappings:
+            - value: '0'
+              newvalue: down
+            - value: '1'
+              newvalue: up
+            - value: '2'
+              newvalue: indeterminate
+            - value: '3'
+              newvalue: link-down
+            - value: '4'
+              newvalue: unknown
+        - uuid: 6811658655184959a6d6e5288c5afa05
+          name: 'UCS Port Role'
+          mappings:
+            - value: '0'
+              newvalue: unknown
+            - value: '1'
+              newvalue: server
+            - value: '2'
+              newvalue: uplink
